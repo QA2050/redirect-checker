@@ -1,0 +1,9 @@
+name = "redirect-checker-api"
+main = "src/index.js"
+compatibility_date = "2026-11-25"
+
+[vars]
+# Replace with your GitHub Pages origin, e.g. https://YOUR-USERNAME.github.io
+ALLOWED_ORIGIN = "https://YOUR-USERNAME.github.io"
+MAX_HOPS = "10"
+TIMEOUT_MS = "12000"

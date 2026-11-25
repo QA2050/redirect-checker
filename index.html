@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Redirect Checker</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <p class="eyebrow">QA TOOL</p>
+      <h1>Redirect Checker</h1>
+      <p class="intro">Upload a CSV or Excel file with <b>Old URL</b> and <b>New URL</b> columns. Verify redirect chains and export results.</p>
+    </header>
+
+    <section class="panel">
+      <label for="workerUrl">Redirect-checker backend URL</label>
+      <input id="workerUrl" type="url" placeholder="https://your-worker.your-subdomain.workers.dev">
+      <p class="hint">Deploy the Cloudflare Worker in <code>worker/</code> first, then paste its URL here.</p>
+
+      <label for="fileInput">URL mapping file (.csv, .xlsx, .xls)</label>
+      <input id="fileInput" type="file" accept=".csv,.xlsx,.xls">
+      <div class="controls">
+        <label class="inline">Concurrent checks
+          <select id="concurrency">
+            <option value="1">1 (safest)</option>
+            <option value="3" selected>3</option>
+            <option value="5">5</option>
+          </select>
+        </label>
+        <button id="startBtn" disabled>Check redirects</button>
+        <button id="stopBtn" class="secondary" disabled>Stop</button>
+      </div>
+      <p id="fileInfo" class="hint">No file selected.</p>
+      <div class="progress"><div id="progressBar"></div></div>
+      <p id="progressText" class="hint">0 / 0 checked</p>
+      <p id="message" role="status"></p>
+    </section>
+
+    <section class="stats" aria-label="Summary">
+      <div class="stat"><span>Total</span><strong id="total">0</strong></div>
+      <div class="stat"><span>Passed</span><strong id="passed">0</strong></div>
+      <div class="stat"><span>Failed</span><strong id="failed">0</strong></div>
+      <div class="stat"><span>Blocked</span><strong id="blocked">0</strong></div>
+    </section>
+
+    <section class="panel">
+      <div class="results-head">
+        <h2>Results</h2>
+        <div class="controls">
+          <button id="exportAll" class="secondary" disabled>Export all CSV</button>
+          <button id="exportBugs" class="secondary" disabled>Export bugs CSV</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>#</th><th>Old URL</th><th>Expected URL</th><th>Actual final URL</th>
+            <th>HTTP</th><th>Hops</th><th>Result</th><th>Issue / Redirect chain</th>
+          </tr></thead>
+          <tbody id="resultsBody"><tr><td colspan="8" class="empty">Upload a file to begin.</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+    <footer>Checks are performed by your configured backend. Results depend on network access and the target site's response. Blocked checks are not counted as confirmed bugs.</footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
